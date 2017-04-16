@@ -64,6 +64,16 @@ public struct JSON {
 
      - returns: The created JSON
      */
+#if os(Linux)
+    public init(data: Data, options opt: JSONSerialization.ReadingOptions = .allowFragments) {
+        do {
+            let object: Any = try JSONSerialization.jsonObject(with: data, options: opt)
+            self.init(jsonObject: object)
+        } catch {
+            self.init(jsonObject: NSNull())
+        }
+    }
+#else
     public init(data: Data, options opt: JSONSerialization.ReadingOptions = .allowFragments, error: NSErrorPointer = nil) {
         do {
             let object: Any = try JSONSerialization.jsonObject(with: data, options: opt)
@@ -75,6 +85,7 @@ public struct JSON {
             self.init(jsonObject: NSNull())
         }
     }
+#endif
 
     /**
      Creates a JSON object
@@ -1307,6 +1318,7 @@ extension JSON {
     }
 }
 
+#if !os(Linux)
 //MARK: - Comparable
 extension JSON : Swift.Comparable {}
 
@@ -1393,6 +1405,7 @@ public func <(lhs: JSON, rhs: JSON) -> Bool {
         return false
     }
 }
+#endif
 
 private let trueNumber = NSNumber(value: true)
 private let falseNumber = NSNumber(value: false)

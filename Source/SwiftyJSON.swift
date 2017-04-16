@@ -250,14 +250,15 @@ public struct JSON {
         set {
             _error = nil
             switch newValue {
-            case let number as NSNumber:
-                if number.isBool {
-                    _type = .bool
-                    self.rawBool = number.boolValue
-                } else {
-                    _type = .number
-                    self.rawNumber = number
-                }
+            case let number as Double:
+                _type = .number
+                rawNumber = NSNumber(value: number)
+            case let number as Int:
+                _type = .number
+                rawNumber = NSNumber(value: number)
+            case let bool as Bool:
+                _type = .bool
+                rawBool = bool
             case let string as String:
                 _type = .string
                 self.rawString = string
@@ -1412,28 +1413,8 @@ private let falseObjCType = String(cString: falseNumber.objCType)
 
 // MARK: - NSNumber: Comparable
 
-extension NSNumber {
-    var isBool:Bool {
-        get {
-            let objCType = String(cString: self.objCType)
-            if (self.compare(trueNumber) == .orderedSame && objCType == trueObjCType) || (self.compare(falseNumber) == .orderedSame && objCType == falseObjCType){
-                return true
-            } else {
-                return false
-            }
-        }
-    }
-}
-
 func ==(lhs: NSNumber, rhs: NSNumber) -> Bool {
-    switch (lhs.isBool, rhs.isBool) {
-    case (false, true):
-        return false
-    case (true, false):
-        return false
-    default:
-        return lhs.compare(rhs) == .orderedSame
-    }
+    return lhs.compare(rhs) == .orderedSame
 }
 
 func !=(lhs: NSNumber, rhs: NSNumber) -> Bool {
@@ -1441,51 +1422,19 @@ func !=(lhs: NSNumber, rhs: NSNumber) -> Bool {
 }
 
 func <(lhs: NSNumber, rhs: NSNumber) -> Bool {
-
-    switch (lhs.isBool, rhs.isBool) {
-    case (false, true):
-        return false
-    case (true, false):
-        return false
-    default:
-        return lhs.compare(rhs) == .orderedAscending
-    }
+    return lhs.compare(rhs) == .orderedAscending
 }
 
 func >(lhs: NSNumber, rhs: NSNumber) -> Bool {
-
-    switch (lhs.isBool, rhs.isBool) {
-    case (false, true):
-        return false
-    case (true, false):
-        return false
-    default:
-        return lhs.compare(rhs) == ComparisonResult.orderedDescending
-    }
+    return lhs.compare(rhs) == ComparisonResult.orderedDescending
 }
 
 func <=(lhs: NSNumber, rhs: NSNumber) -> Bool {
-
-    switch (lhs.isBool, rhs.isBool) {
-    case (false, true):
-        return false
-    case (true, false):
-        return false
-    default:
-        return lhs.compare(rhs) != .orderedDescending
-    }
+    return lhs.compare(rhs) != .orderedDescending
 }
 
 func >=(lhs: NSNumber, rhs: NSNumber) -> Bool {
-
-    switch (lhs.isBool, rhs.isBool) {
-    case (false, true):
-        return false
-    case (true, false):
-        return false
-    default:
-        return lhs.compare(rhs) != .orderedAscending
-    }
+    return lhs.compare(rhs) != .orderedAscending
 }
 
 public enum writtingOptionsKeys {

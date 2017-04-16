@@ -1318,7 +1318,6 @@ extension JSON {
     }
 }
 
-#if !os(Linux)
 //MARK: - Comparable
 extension JSON : Swift.Comparable {}
 
@@ -1332,9 +1331,9 @@ public func ==(lhs: JSON, rhs: JSON) -> Bool {
     case (.bool, .bool):
         return lhs.rawBool == rhs.rawBool
     case (.array, .array):
-        return lhs.rawArray as NSArray == rhs.rawArray as NSArray
+        return NSArray(array: lhs.rawArray) == NSArray(array: rhs.rawArray)
     case (.dictionary, .dictionary):
-        return lhs.rawDictionary as NSDictionary == rhs.rawDictionary as NSDictionary
+        return NSDictionary(dictionary: lhs.rawDictionary) == NSDictionary(dictionary: rhs.rawDictionary)
     case (.null, .null):
         return true
     default:
@@ -1352,9 +1351,9 @@ public func <=(lhs: JSON, rhs: JSON) -> Bool {
     case (.bool, .bool):
         return lhs.rawBool == rhs.rawBool
     case (.array, .array):
-        return lhs.rawArray as NSArray == rhs.rawArray as NSArray
+        return NSArray(array: lhs.rawArray) == NSArray(array: rhs.rawArray)
     case (.dictionary, .dictionary):
-        return lhs.rawDictionary as NSDictionary == rhs.rawDictionary as NSDictionary
+        return NSDictionary(dictionary: lhs.rawDictionary) == NSDictionary(dictionary: rhs.rawDictionary)
     case (.null, .null):
         return true
     default:
@@ -1372,9 +1371,9 @@ public func >=(lhs: JSON, rhs: JSON) -> Bool {
     case (.bool, .bool):
         return lhs.rawBool == rhs.rawBool
     case (.array, .array):
-        return lhs.rawArray as NSArray == rhs.rawArray as NSArray
+        return NSArray(array: lhs.rawArray) == NSArray(array: rhs.rawArray)
     case (.dictionary, .dictionary):
-        return lhs.rawDictionary as NSDictionary == rhs.rawDictionary as NSDictionary
+        return NSDictionary(dictionary: lhs.rawDictionary) == NSDictionary(dictionary: rhs.rawDictionary)
     case (.null, .null):
         return true
     default:
@@ -1405,7 +1404,6 @@ public func <(lhs: JSON, rhs: JSON) -> Bool {
         return false
     }
 }
-#endif
 
 private let trueNumber = NSNumber(value: true)
 private let falseNumber = NSNumber(value: false)
